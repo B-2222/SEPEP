@@ -9,7 +9,7 @@ const DATA = {
       "name": "Simon Says",
       "coach": "James Berean",
       "colour": "#F0A43A",
-      "logo": "https://kommodo.ai/i/VfGDcQFaobiSGEpcvDPz",
+      "logo": "simpon says.png",
       "players": [
         {
           "name": "Barsa",
@@ -60,7 +60,7 @@ const DATA = {
       "name": "Sharks",
       "coach": "Charlie Newbold",
       "colour": "#5FB0D4",
-      "logo": "https://kommodo.ai/i/1BVpv1CqzruPx3Xk8Crp",
+      "logo": "sharks.png",
       "players": [
         {
           "name": "Keir",
@@ -117,7 +117,7 @@ const DATA = {
       "name": "Titans",
       "coach": "Will Cooke",
       "colour": "#C4574E",
-      "logo": "https://kommodo.ai/i/JokU1TaRy0tosQ0I5kBQ",
+      "logo": "titans.png",
       "players": [
         {
           "name": "Harper",
