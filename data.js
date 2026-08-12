@@ -4,20 +4,79 @@
 
 const DATA = {
   "sections": [
-    { "id": "home",       "on": true,  "title": "Home",           "sub": "Season at a glance" },
-    { "id": "ladder",     "on": true,  "title": "Ladder",         "sub": "Two points a win, one a draw" },
-    { "id": "fixtures",   "on": true,  "title": "Fixtures",       "sub": "The team not playing referees and votes" },
-    { "id": "stats",      "on": true,  "title": "Stats",          "sub": "Season totals across all halves" },
-    { "id": "mvp",        "on": true,  "title": "The MVP Race",   "sub": "Voted by the refereeing team" },
-    { "id": "tipping",    "on": true,  "title": "Tipping",        "sub": "Pick your winners before the lesson" },
-    { "id": "teams",      "on": true,  "title": "Teams",          "sub": "Tap any player for their season" },
-    { "id": "gallery",    "on": false, "title": "Gallery",        "sub": "From the sideline" },
-    { "id": "reports",    "on": true,  "title": "Match Reports",  "sub": "" },
-    { "id": "interviews", "on": true,  "title": "Interviews",     "sub": "Players and coaches on camera" },
-    { "id": "quotes",     "on": true,  "title": "Coach's Corner", "sub": "" },
-    { "id": "rules",      "on": true,  "title": "Rules",          "sub": "" }
+    {
+      "id": "home",
+      "on": true,
+      "title": "Home",
+      "sub": "Season at a glance"
+    },
+    {
+      "id": "ladder",
+      "on": true,
+      "title": "Ladder",
+      "sub": "Two points a win, one a draw"
+    },
+    {
+      "id": "fixtures",
+      "on": true,
+      "title": "Fixtures",
+      "sub": "The team not playing referees and votes"
+    },
+    {
+      "id": "stats",
+      "on": true,
+      "title": "Stats",
+      "sub": "Season totals across all halves"
+    },
+    {
+      "id": "mvp",
+      "on": true,
+      "title": "The MVP Race",
+      "sub": "Voted by the refereeing team"
+    },
+    {
+      "id": "tipping",
+      "on": true,
+      "title": "Tipping",
+      "sub": "Pick your winners before the lesson"
+    },
+    {
+      "id": "teams",
+      "on": true,
+      "title": "Teams",
+      "sub": "Tap any player for their season"
+    },
+    {
+      "id": "gallery",
+      "on": false,
+      "title": "Gallery",
+      "sub": "From the sideline"
+    },
+    {
+      "id": "reports",
+      "on": true,
+      "title": "Match Reports",
+      "sub": ""
+    },
+    {
+      "id": "interviews",
+      "on": true,
+      "title": "Interviews",
+      "sub": "Players and coaches on camera"
+    },
+    {
+      "id": "quotes",
+      "on": true,
+      "title": "Coach's Corner",
+      "sub": ""
+    },
+    {
+      "id": "rules",
+      "on": true,
+      "title": "Rules",
+      "sub": ""
+    }
   ],
-
   "teams": [
     {
       "id": "T1",
@@ -26,13 +85,48 @@ const DATA = {
       "colour": "#F0A43A",
       "logo": "simpon says.png",
       "players": [
-        { "name": "Barsa",         "no": 1, "pos": "", "photo": "" },
-        { "name": "Hamish",        "no": 2, "pos": "", "photo": "" },
-        { "name": "Max Jenkinson", "no": 3, "pos": "", "photo": "" },
-        { "name": "Fraser",        "no": 4, "pos": "", "photo": "" },
-        { "name": "Isaac",         "no": 5, "pos": "", "photo": "" },
-        { "name": "Aleksa",        "no": 6, "pos": "", "photo": "" },
-        { "name": "Simon",         "no": 7, "pos": "", "photo": "" }
+        {
+          "name": "Barsa",
+          "no": 1,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Hamish",
+          "no": 2,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Max Jenkinson",
+          "no": 3,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Fraser",
+          "no": 4,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Isaac",
+          "no": 5,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Aleksa",
+          "no": 6,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Simon",
+          "no": 7,
+          "pos": "",
+          "photo": ""
+        }
       ]
     },
     {
@@ -42,14 +136,54 @@ const DATA = {
       "colour": "#5FB0D4",
       "logo": "sharks.png",
       "players": [
-        { "name": "Keir",           "no": 1, "pos": "", "photo": "" },
-        { "name": "Cooper",         "no": 2, "pos": "", "photo": "" },
-        { "name": "Will Fox",       "no": 3, "pos": "", "photo": "" },
-        { "name": "Dhruva",         "no": 4, "pos": "", "photo": "" },
-        { "name": "Ben Roberts",    "no": 5, "pos": "", "photo": "" },
-        { "name": "Hugh",           "no": 6, "pos": "", "photo": "" },
-        { "name": "Archer Miller",  "no": 7, "pos": "", "photo": "" },
-        { "name": "Lachlan Gillet", "no": 8, "pos": "", "photo": "" }
+        {
+          "name": "Keir",
+          "no": 1,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Cooper",
+          "no": 2,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Will Fox",
+          "no": 3,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Dhruva",
+          "no": 4,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Ben Roberts",
+          "no": 5,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Hugh",
+          "no": 6,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Archer Miller",
+          "no": 7,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Lachlan Gillet",
+          "no": 8,
+          "pos": "",
+          "photo": ""
+        }
       ]
     },
     {
@@ -59,38 +193,193 @@ const DATA = {
       "colour": "#C4574E",
       "logo": "titans.png",
       "players": [
-        { "name": "Harper",       "no": 1, "pos": "", "photo": "" },
-        { "name": "Will Liston",  "no": 2, "pos": "", "photo": "" },
-        { "name": "Max Kovac",    "no": 3, "pos": "", "photo": "" },
-        { "name": "Ben Stupples", "no": 4, "pos": "", "photo": "" },
-        { "name": "Jack Telfer",  "no": 5, "pos": "", "photo": "" },
-        { "name": "Jackson",      "no": 6, "pos": "", "photo": "" },
-        { "name": "Max Davis",    "no": 7, "pos": "", "photo": "" }
+        {
+          "name": "Harper",
+          "no": 1,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Will Liston",
+          "no": 2,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Max Kovac",
+          "no": 3,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Ben Stupples",
+          "no": 4,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Jack Telfer",
+          "no": 5,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Jackson",
+          "no": 6,
+          "pos": "",
+          "photo": ""
+        },
+        {
+          "name": "Max Davis",
+          "no": 7,
+          "pos": "",
+          "photo": ""
+        }
       ]
     }
   ],
-
   "fixtures": [
-    { "id": "g01", "round": 1, "half": 1, "home": "T2", "away": "T3", "when": "", "played": false, "homeScore": "", "awayScore": "" },
-    { "id": "g02", "round": 1, "half": 2, "home": "T2", "away": "T1", "when": "", "played": false, "homeScore": "", "awayScore": "" },
-    { "id": "g03", "round": 2, "half": 1, "home": "T3", "away": "T1", "when": "", "played": false, "homeScore": "", "awayScore": "" },
-    { "id": "g04", "round": 2, "half": 2, "home": "T2", "away": "T3", "when": "", "played": false, "homeScore": "", "awayScore": "" },
-    { "id": "g05", "round": 3, "half": 1, "home": "T2", "away": "T1", "when": "", "played": false, "homeScore": "", "awayScore": "" },
-    { "id": "g06", "round": 3, "half": 2, "home": "T3", "away": "T1", "when": "", "played": false, "homeScore": "", "awayScore": "" },
-    { "id": "g07", "round": 4, "half": 1, "home": "T2", "away": "T3", "when": "", "played": false, "homeScore": "", "awayScore": "" },
-    { "id": "g08", "round": 4, "half": 2, "home": "T2", "away": "T1", "when": "", "played": false, "homeScore": "", "awayScore": "" },
-    { "id": "g09", "round": 5, "half": 1, "home": "T3", "away": "T1", "when": "", "played": false, "homeScore": "", "awayScore": "" },
-    { "id": "g10", "round": 5, "half": 2, "home": "T2", "away": "T3", "when": "", "played": false, "homeScore": "", "awayScore": "" },
-    { "id": "g11", "round": 6, "half": 1, "home": "T2", "away": "T1", "when": "", "played": false, "homeScore": "", "awayScore": "" },
-    { "id": "g12", "round": 6, "half": 2, "home": "T3", "away": "T1", "when": "", "played": false, "homeScore": "", "awayScore": "" }
+    {
+      "id": "g01",
+      "round": 1,
+      "half": 1,
+      "home": "T2",
+      "away": "T3",
+      "when": "",
+      "played": false,
+      "homeScore": "",
+      "awayScore": ""
+    },
+    {
+      "id": "g02",
+      "round": 1,
+      "half": 2,
+      "home": "T2",
+      "away": "T1",
+      "when": "",
+      "played": false,
+      "homeScore": "",
+      "awayScore": ""
+    },
+    {
+      "id": "g03",
+      "round": 2,
+      "half": 1,
+      "home": "T3",
+      "away": "T1",
+      "when": "",
+      "played": false,
+      "homeScore": "",
+      "awayScore": ""
+    },
+    {
+      "id": "g04",
+      "round": 2,
+      "half": 2,
+      "home": "T2",
+      "away": "T3",
+      "when": "",
+      "played": false,
+      "homeScore": "",
+      "awayScore": ""
+    },
+    {
+      "id": "g05",
+      "round": 3,
+      "half": 1,
+      "home": "T2",
+      "away": "T1",
+      "when": "",
+      "played": false,
+      "homeScore": "",
+      "awayScore": ""
+    },
+    {
+      "id": "g06",
+      "round": 3,
+      "half": 2,
+      "home": "T3",
+      "away": "T1",
+      "when": "",
+      "played": false,
+      "homeScore": "",
+      "awayScore": ""
+    },
+    {
+      "id": "g07",
+      "round": 4,
+      "half": 1,
+      "home": "T2",
+      "away": "T3",
+      "when": "",
+      "played": false,
+      "homeScore": "",
+      "awayScore": ""
+    },
+    {
+      "id": "g08",
+      "round": 4,
+      "half": 2,
+      "home": "T2",
+      "away": "T1",
+      "when": "",
+      "played": false,
+      "homeScore": "",
+      "awayScore": ""
+    },
+    {
+      "id": "g09",
+      "round": 5,
+      "half": 1,
+      "home": "T3",
+      "away": "T1",
+      "when": "",
+      "played": false,
+      "homeScore": "",
+      "awayScore": ""
+    },
+    {
+      "id": "g10",
+      "round": 5,
+      "half": 2,
+      "home": "T2",
+      "away": "T3",
+      "when": "",
+      "played": false,
+      "homeScore": "",
+      "awayScore": ""
+    },
+    {
+      "id": "g11",
+      "round": 6,
+      "half": 1,
+      "home": "T2",
+      "away": "T1",
+      "when": "",
+      "played": false,
+      "homeScore": "",
+      "awayScore": ""
+    },
+    {
+      "id": "g12",
+      "round": 6,
+      "half": 2,
+      "home": "T3",
+      "away": "T1",
+      "when": "",
+      "played": false,
+      "homeScore": "",
+      "awayScore": ""
+    }
   ],
-
   "votes": [],
   "potr": [],
-
-  "statCategories": ["Goals", "Overs", "Behinds"],
+  "statCategories": [
+    "Goals",
+    "Overs",
+    "Behinds"
+  ],
   "stats": [],
-
   "tips": [
     {
       "tipper": "Will Fox",
@@ -105,14 +394,16 @@ const DATA = {
         "g01": "T3",
         "g02": "T2"
       }
+    },
+    {
+      "tipper": "Ben Roberts",
+      "picks": {}
     }
   ],
-
   "gallery": [],
   "reports": [],
   "interviews": [],
   "quotes": [],
-
   "rules": [
     {
       "heading": "Rules",
@@ -133,6 +424,9 @@ const DATA = {
       ]
     }
   ],
-
-  "ladderPoints": { "win": 2, "draw": 1, "loss": 0 }
+  "ladderPoints": {
+    "win": 2,
+    "draw": 1,
+    "loss": 0
+  }
 };
