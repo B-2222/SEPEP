@@ -1165,6 +1165,7 @@ var LOCPASS = "media";          /* fallback passcode when the cloud is off */
 var CACHE  = "sepep.cache.v1";
 var TKEY   = "sepep.theme";
 var MYTIPS = "sepep.mytips";
+var AKEY   = "sepep.api";
 
 /* ─────────────── tiny helpers ─────────────── */
 function $(id){ return document.getElementById(id); }
@@ -1290,7 +1291,7 @@ var D = normalise(clone(seed));
 var F = function(k){ return !!D.settings.features[k]; };
 
 /* ─────────────── state ─────────────── */
-var S={ view:'home', fxFilter:'next', statSort:null, tipRound:null,
+var S={ view:'home', fxFilter:'next', statSort:null, tipRound:null, apiPublished:false,
         myTips:{}, myName:'', cloud:'off', rev:0, dirty:false, deskOpen:false };
 try{ var mt=JSON.parse(localStorage.getItem(MYTIPS)||'{}');
      S.myName=mt.name||''; S.myTips=mt.picks||{}; }catch(e){}
@@ -2828,7 +2829,21 @@ function paintPublish(){
   $('out').value=build();
   $('ghLink').href='https://github.com/'+REPO+'/edit/main/data.js';
   var box=$('pubCloud');
-  if(api()){
+  var halfway = api() && !S.apiPublished;
+  if(halfway){
+    box.innerHTML='<h3><span class="dot wait"></span>Nearly there — one paste to go</h3>'+
+      '<p class="lede">The cloud is working, but <strong>only this browser knows the address</strong>. '+
+      'Everyone else still sees the old copy-and-paste site, and if you refresh this page you will '+
+      'have to enter the URL again.<br><br>Do the copy-and-paste below <strong>once</strong> and it is '+
+      'set for good — after that the Desk saves with one button and tips come in on their own.</p>'+
+      '<div class="row"><button class="b" id="cloudSave">Save to the cloud anyway</button>'+
+      '<span class="note" id="cloudMsg"></span></div>';
+    $('cloudSave').addEventListener('click',cloudSave);
+    $('pubManual').querySelector('h3').textContent='Do this once: publish data.js';
+    $('pubManual').querySelector('.lede').innerHTML='This is the last time you have to do this. '+
+      'Pasting the file in is what saves the cloud address into the site itself, for everyone and '+
+      'for good.';
+  } else if(api()){
     box.innerHTML='<h3><span class="dot '+(S.cloud==='ok'?'ok':S.cloud==='error'?'no':'wait')+'"></span>'+
       'Save to the cloud</h3>'+
       '<p class="lede">One button. Everyone sees it within a few seconds — no GitHub, no pasting.</p>'+
@@ -2836,6 +2851,8 @@ function paintPublish(){
       '<span class="note" id="cloudMsg"></span></div>';
     $('cloudSave').addEventListener('click',cloudSave);
     $('pubManual').querySelector('h3').textContent='Backup: publish by hand';
+    $('pubManual').querySelector('.lede').textContent='You should not need this any more, but it still '+
+      'works if the cloud is ever down.';
   } else {
     box.innerHTML='<h3><span class="dot no"></span>The cloud is not connected</h3>'+
       '<p class="lede">Right now every change has to be pasted into GitHub by hand. Set the cloud up once '+
@@ -2877,9 +2894,15 @@ function adCloud(){
   var s=$('cloudStatus');
   var dot=S.cloud==='ok'?'ok':S.cloud==='error'?'no':api()?'wait':'';
   s.innerHTML='<h3><span class="dot '+dot+'"></span>Status</h3>'+
+    (api()&&!S.apiPublished
+      ? '<p class="lede" style="color:var(--accent)">This browser has the URL, but the site itself does '+
+        'not yet. Go to <strong>Publish</strong> and do the copy-and-paste once, or the URL is lost on '+
+        'refresh and nobody else gets the cloud.</p>' : '')+
     '<div class="kv"><span>Cloud</span><strong>'+
-      (!api()?'Not connected':S.cloud==='ok'?'Connected and working':
+      (!api()?'Not connected':S.cloud==='ok'?(S.apiPublished?'Connected and working':'Working in this browser only'):
        S.cloud==='error'?'Connected but not answering':'Checking…')+'</strong></div>'+
+    '<div class="kv"><span>Saved into the site</span><strong>'+
+      (!api()?'—':S.apiPublished?'Yes':'No — publish data.js once')+'</strong></div>'+
     '<div class="kv"><span>Version on the cloud</span><strong>'+(S.rev||'—')+'</strong></div>'+
     '<div class="kv"><span>Public tipping</span><strong>'+
       (F('publicTips')?(api()?'On — tips save themselves':'On — copy and send only'):'Off')+'</strong></div>'+
@@ -2929,6 +2952,8 @@ $('cloudTest').addEventListener('click',function(){
 $('cloudSaveUrl').addEventListener('click',function(){
   var url=($('cloudUrl').value||'').trim();
   D.settings.apiUrl=url;
+  S.apiPublished=false;
+  try{ if(url) localStorage.setItem(AKEY,url); else localStorage.removeItem(AKEY); }catch(e){}
   mark('Cloud URL set · publish once by hand'); adCloud(); paintPublish();
   showTab('aPub');
 });
@@ -3002,7 +3027,15 @@ function bootDesk(){
 
 /* ══════════════════════════ boot ══════════════════════════ */
 (function boot(){
-  var seedApi=D.settings.apiUrl;
+  var seedApi=D.settings.apiUrl, savedApi=null;
+  try{ savedApi=localStorage.getItem(AKEY)||null; }catch(e){}
+  if(savedApi&&savedApi===seedApi){                 /* published — no longer needed here */
+    try{ localStorage.removeItem(AKEY); }catch(e){}
+    savedApi=null;
+  }
+  if(savedApi) D.settings.apiUrl=savedApi;          /* set in the Desk but not published yet */
+  S.apiPublished = !!seedApi && !savedApi;
+  seedApi=D.settings.apiUrl;
   if(seedApi){
     var cached=cacheLoad();
     if(cached){ D=cached; if(!D.settings.apiUrl) D.settings.apiUrl=seedApi; }
