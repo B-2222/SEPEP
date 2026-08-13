@@ -2970,11 +2970,15 @@ function unlock(){
     return;
   }
   $('adGo').disabled=true; $('adGo').textContent='Checking…';
-  apiPost({action:'auth',pass:p},function(err){
+  apiPost({action:'auth',pass:p},function(err,res){
     $('adGo').disabled=false; $('adGo').textContent='Unlock';
     if(err){
+      /* res means the cloud answered and said no — that is a wrong passcode.
+         No res means we could not reach it at all, so fall back to the local
+         one and let them work offline (they still cannot save to the cloud). */
+      if(res){ $('adErr').textContent='Wrong passcode.'; return; }
       if(p===LOCPASS){ deskPass=p; enterDesk(); return; }
-      $('adErr').textContent='Wrong passcode.'; return;
+      $('adErr').textContent='Could not reach the cloud. Check your connection.'; return;
     }
     deskPass=p; enterDesk();
   });
