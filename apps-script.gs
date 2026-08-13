@@ -54,7 +54,7 @@ function storeFile() {
     props().setProperty('fileId', f.getId());
     return f;
   }
-  var made = DriveApp.createFile(FILE_NAME, JSON.stringify({ rev: 0, data: null }),
+  var made = DriveApp.createFile(FILE_NAME, JSON.stringify({ rev: 0, dataRev: 0, data: null }),
     MimeType.PLAIN_TEXT);
   props().setProperty('fileId', made.getId());
   return made;
@@ -63,9 +63,11 @@ function storeFile() {
 function readStore() {
   try {
     var o = JSON.parse(storeFile().getBlob().getDataAsString());
-    return (o && typeof o === 'object') ? o : { rev: 0, data: null };
+    if (!o || typeof o !== 'object') return { rev: 0, dataRev: 0, data: null };
+    if (o.dataRev == null) o.dataRev = o.rev || 0;
+    return o;
   } catch (e) {
-    return { rev: 0, data: null };
+    return { rev: 0, dataRev: 0, data: null };
   }
 }
 
@@ -130,7 +132,8 @@ function doGet(e) {
     }
 
     var store = readStore();
-    return reply({ ok: true, rev: store.rev || 0, data: store.data || null }, cb);
+    return reply({ ok: true, rev: store.rev || 0, dataRev: store.dataRev || 0,
+      data: store.data || null }, cb);
 
   } catch (err) {
     return reply({ ok: false, error: String(err) }, cb);
@@ -163,10 +166,25 @@ function doPost(e) {
     if (action === 'save') {
       if (!checkPass(body.pass)) return reply({ ok: false, error: 'wrong passcode' });
       if (!body.data || !body.data.teams) return reply({ ok: false, error: 'no data' });
+
+      /* Somebody else saved while this Desk was open. Tips coming in do not
+         count — they bump rev, not dataRev — so this only fires on a real
+         clash between two editors. */
+      if (!body.force && body.dataRev != null && store.data &&
+          Number(body.dataRev) !== Number(store.dataRev || 0)) {
+        return reply({ ok: false, error: 'changed', conflict: true,
+          dataRev: store.dataRev || 0 });
+      }
+
       makeBackup(store);
-      var next = { rev: (store.rev || 0) + 1, data: body.data, at: new Date().toISOString() };
+      var next = {
+        rev: (store.rev || 0) + 1,
+        dataRev: (store.dataRev || 0) + 1,
+        data: body.data,
+        at: new Date().toISOString()
+      };
       writeStore(next);
-      return reply({ ok: true, rev: next.rev });
+      return reply({ ok: true, rev: next.rev, dataRev: next.dataRev });
     }
 
     /* ── somebody putting their own tips in ── */
@@ -202,7 +220,7 @@ function doPost(e) {
       } else {
         store.data.tips.push({ tipper: name, picks: clean });
       }
-      store.rev = (store.rev || 0) + 1;
+      store.rev = (store.rev || 0) + 1;   /* tips do not touch dataRev */
       writeStore(store);
       return reply({ ok: true, rev: store.rev });
     }
@@ -213,9 +231,14 @@ function doPost(e) {
       var old = JSON.parse(DriveApp.getFileById(body.id).getBlob().getDataAsString());
       if (!old || !old.data) return reply({ ok: false, error: 'that backup is empty' });
       makeBackup(store);
-      var restored = { rev: (store.rev || 0) + 1, data: old.data, at: new Date().toISOString() };
+      var restored = {
+        rev: (store.rev || 0) + 1,
+        dataRev: (store.dataRev || 0) + 1,
+        data: old.data,
+        at: new Date().toISOString()
+      };
       writeStore(restored);
-      return reply({ ok: true, rev: restored.rev });
+      return reply({ ok: true, rev: restored.rev, dataRev: restored.dataRev });
     }
 
     return reply({ ok: false, error: 'unknown action' });
