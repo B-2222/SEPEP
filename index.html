@@ -1157,6 +1157,7 @@ table.g tbody tr:hover{background:var(--surface-2)}
         <p class="note" style="margin-top:12px">Hit <strong>Use this URL</strong>, then go to the Publish tab and
           do the copy-and-paste one last time. From then on the Desk saves to the cloud on its own.</p>
       </div>
+      <div class="box" id="cloudImport"></div>
       <div class="box" id="cloudBackups"></div>
     </div>
   </div>
@@ -3140,12 +3141,52 @@ $('cloudSaveUrl').addEventListener('click',function(){
   showTab('aPub');
 });
 
+/* ── bring data.js in from GitHub ── */
+function parseDataFile(txt){
+  var m=String(txt).match(/const\s+DATA\s*=\s*([\s\S]*?);\s*$/);
+  if(!m) throw new Error('That file does not look like data.js');
+  var obj=JSON.parse(m[1]);
+  if(!obj||!obj.teams||!obj.teams.length) throw new Error('No teams in that file');
+  return obj;
+}
+function adImport(){
+  var box=$('cloudImport');
+  box.innerHTML='<h3>Bring in data.js from GitHub</h3>'+
+    '<p class="lede">Loads the content file from the repo into the Desk, replacing what is here now. '+
+    'Use it when the file has been prepared in GitHub, or to roll the site back to it. '+
+    'Nothing goes live until you press Save.</p>'+
+    '<div class="row"><button class="b ghost" id="ghPull">Load data.js from GitHub</button>'+
+    '<span class="note" id="ghMsg"></span></div>';
+  $('ghPull').addEventListener('click',function(){
+    if(S.dirty&&!confirm('You have unpublished changes in the Desk. Replace them with the file from GitHub?')) return;
+    var b=$('ghPull'), m=$('ghMsg');
+    b.disabled=true; b.textContent='Loading…'; m.textContent='';
+    fetch('https://raw.githubusercontent.com/'+REPO+'/main/data.js?t='+Date.now(),{cache:'no-store'})
+      .then(function(r){ if(!r.ok) throw new Error('GitHub said '+r.status); return r.text(); })
+      .then(function(txt){
+        var keep=D.settings.apiUrl;
+        var obj=parseDataFile(txt);
+        D=normalise(obj);
+        if(!D.settings.apiUrl) D.settings.apiUrl=keep;
+        b.disabled=false; b.textContent='Load data.js from GitHub';
+        applySettings(); bootDesk(); mark('Loaded from GitHub · not saved yet');
+        $('ghMsg').textContent='Loaded. Check it, then hit Save and go live.';
+        toast('Loaded from GitHub');
+      })
+      .catch(function(e){
+        b.disabled=false; b.textContent='Load data.js from GitHub';
+        m.textContent='Could not load it: '+e.message;
+        toast('Could not load data.js',true);
+      });
+  });
+}
+
 /* ── tabs, gate, boot ── */
 function showTab(id){
   qa('#adTabs .tab').forEach(function(t){ t.classList.toggle('on',t.dataset.p===id); });
   qa('#ad .panel').forEach(function(p){ p.classList.toggle('on',p.id===id); });
   if(id==='aPub') paintPublish();
-  if(id==='aCloud') adCloud();
+  if(id==='aCloud'){ adCloud(); adImport(); }
   if(id==='aLook') adLook();
   if(id==='aFeat') adFeat();
 }
@@ -3205,7 +3246,7 @@ function bootDesk(){
   adSecs(); adFeat(); adLook(); adTeams(); adFix();
   adVoteGames(); adVotes(); adPotr(); adStatGames(); adStats();
   adTips(); adGal(); adRep(); adInt(); adQuo(); adRul();
-  adCloud(); paintPublish(); paintCloudChip();
+  adCloud(); adImport(); paintPublish(); paintCloudChip();
 }
 
 /* ══════════════════════════ boot ══════════════════════════ */

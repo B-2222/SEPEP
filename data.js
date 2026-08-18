@@ -288,9 +288,9 @@ const DATA = {
       "home": "T3",
       "away": "T1",
       "when": "",
-      "played": false,
-      "homeScore": "",
-      "awayScore": "",
+      "played": true,
+      "homeScore": 9,
+      "awayScore": 1,
       "date": ""
     },
     {
@@ -300,9 +300,9 @@ const DATA = {
       "home": "T2",
       "away": "T3",
       "when": "",
-      "played": false,
-      "homeScore": "",
-      "awayScore": "",
+      "played": true,
+      "homeScore": 4,
+      "awayScore": 0,
       "date": ""
     },
     {
@@ -436,6 +436,40 @@ const DATA = {
           "votes": 1
         }
       ]
+    },
+    {
+      "fixtureId": "g04",
+      "lines": [
+        {
+          "player": "Hugh",
+          "votes": 3
+        },
+        {
+          "player": "Charlie Newbold",
+          "votes": 2
+        },
+        {
+          "player": "Jackson",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "fixtureId": "g03",
+      "lines": [
+        {
+          "player": "Will Liston",
+          "votes": 3
+        },
+        {
+          "player": "Max Davis",
+          "votes": 2
+        },
+        {
+          "player": "Fraser",
+          "votes": 1
+        }
+      ]
     }
   ],
   "potr": [],
@@ -479,6 +513,14 @@ const DATA = {
             "Overs": 0,
             "Saves": 1
           }
+        },
+        {
+          "player": "Lachlan Gillet",
+          "values": {
+            "Goals": 0,
+            "Overs": 0,
+            "Saves": 1
+          }
         }
       ]
     },
@@ -490,6 +532,72 @@ const DATA = {
           "values": {
             "Goals": 0,
             "Overs": 1,
+            "Saves": 0
+          }
+        },
+        {
+          "player": "Fraser",
+          "values": {
+            "Goals": 0,
+            "Overs": 0,
+            "Saves": 1
+          }
+        }
+      ]
+    },
+    {
+      "fixtureId": "g04",
+      "lines": [
+        {
+          "player": "Charlie Newbold",
+          "values": {
+            "Goals": 3,
+            "Overs": 0,
+            "Saves": 0
+          }
+        },
+        {
+          "player": "Hugh",
+          "values": {
+            "Goals": 1,
+            "Overs": 0,
+            "Saves": 0
+          }
+        }
+      ]
+    },
+    {
+      "fixtureId": "g03",
+      "lines": [
+        {
+          "player": "Will Liston",
+          "values": {
+            "Goals": 3,
+            "Overs": 0,
+            "Saves": 0
+          }
+        },
+        {
+          "player": "Jackson",
+          "values": {
+            "Goals": 3,
+            "Overs": 0,
+            "Saves": 0
+          }
+        },
+        {
+          "player": "Max Davis",
+          "values": {
+            "Goals": 3,
+            "Overs": 0,
+            "Saves": 0
+          }
+        },
+        {
+          "player": "Max Jenkinson",
+          "values": {
+            "Goals": 1,
+            "Overs": 0,
             "Saves": 0
           }
         },
