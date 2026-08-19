@@ -3035,6 +3035,25 @@ function cloudSave(force){
   var b=$('cloudSave'), m=$('cloudMsg');
   var label=b.textContent;
   b.disabled=true; b.textContent='Saving…'; m.textContent='';
+  /* Pick up anyone who tipped since this Desk last synced and fold them in
+     before we send. The cloud does this too, but doing it here means tips are
+     safe even against an older copy of the Apps Script. */
+  apiGet({action:'get'},function(gErr,gRes){
+    if(!gErr&&gRes&&gRes.ok&&gRes.data&&gRes.data.tips){
+      var low=function(x){ return String(x||'').toLowerCase(); };
+      var known=(S.knownTippers||[]).map(low);
+      var mine=D.tips||[];
+      var have=mine.map(function(t){ return low(t.tipper); });
+      gRes.data.tips.forEach(function(t){
+        var n=low(t.tipper);
+        if(known.indexOf(n)<0&&have.indexOf(n)<0) mine.push(t);   /* new since we synced */
+      });
+      D.tips=mine;
+    }
+    cloudPost(b,m,label,force);
+  });
+}
+function cloudPost(b,m,label,force){
   apiPost({action:'save',pass:deskPass,data:D,dataRev:S.dataRev,force:!!force,
            knownTippers:S.knownTippers},function(err,res){
     b.disabled=false; b.textContent=label;
