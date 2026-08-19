@@ -176,6 +176,23 @@ function doPost(e) {
           dataRev: store.dataRev || 0 });
       }
 
+      /* Anyone who tipped after this Desk last synced must survive the save.
+         The Desk says who it knew about; a tipper it never saw is one who came
+         in since, so keep them. A tipper it did know about but did not send
+         back was deliberately deleted, so let that through. */
+      if (store.data && store.data.tips && store.data.tips.length) {
+        var known = (body.knownTippers || []).map(function (x) {
+          return String(x || '').toLowerCase();
+        });
+        var incoming = body.data.tips || [];
+        var sent = incoming.map(function (t) { return String(t.tipper || '').toLowerCase(); });
+        store.data.tips.forEach(function (t) {
+          var name = String(t.tipper || '').toLowerCase();
+          if (known.indexOf(name) < 0 && sent.indexOf(name) < 0) incoming.push(t);
+        });
+        body.data.tips = incoming;
+      }
+
       makeBackup(store);
       var next = {
         rev: (store.rev || 0) + 1,

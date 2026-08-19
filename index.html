@@ -1308,7 +1308,7 @@ var D = normalise(clone(seed));
 var F = function(k){ return !!D.settings.features[k]; };
 
 /* ─────────────── state ─────────────── */
-var S={ view:'home', fxFilter:'next', statSort:null, tipRound:null, apiPublished:false, dataRev:0,
+var S={ view:'home', fxFilter:'next', statSort:null, tipRound:null, apiPublished:false, dataRev:0, knownTippers:[],
         myTips:{}, myName:'', cloud:'off', rev:0, dirty:false, deskOpen:false };
 try{ var mt=JSON.parse(localStorage.getItem(MYTIPS)||'{}');
      S.myName=mt.name||''; S.myTips=mt.picks||{}; }catch(e){}
@@ -1361,7 +1361,9 @@ function pull(after){
       var keepPass=D.settings.apiUrl;
       D=normalise(res.data);
       if(!D.settings.apiUrl) D.settings.apiUrl=keepPass;
-      S.rev=res.rev||0; S.dataRev=res.dataRev||0; S.cloud='ok'; cacheSave(); applySettings();
+      S.rev=res.rev||0; S.dataRev=res.dataRev||0; S.cloud='ok';
+      S.knownTippers=(D.tips||[]).map(function(t){ return String(t.tipper||''); });
+      cacheSave(); applySettings();
     }
     paintCloudChip();
     if(after) after(); else render();
@@ -3033,7 +3035,8 @@ function cloudSave(force){
   var b=$('cloudSave'), m=$('cloudMsg');
   var label=b.textContent;
   b.disabled=true; b.textContent='Saving…'; m.textContent='';
-  apiPost({action:'save',pass:deskPass,data:D,dataRev:S.dataRev,force:!!force},function(err,res){
+  apiPost({action:'save',pass:deskPass,data:D,dataRev:S.dataRev,force:!!force,
+           knownTippers:S.knownTippers},function(err,res){
     b.disabled=false; b.textContent=label;
     if(err&&res&&res.conflict){
       m.textContent='';
@@ -3053,6 +3056,7 @@ function cloudSave(force){
     }
     S.rev=(res&&res.rev)||S.rev+1;
     S.dataRev=(res&&res.dataRev)||S.dataRev+1;
+    S.knownTippers=(D.tips||[]).map(function(t){ return String(t.tipper||''); });
     S.cloud='ok'; cacheSave();
     cleared('Live · saved'); m.textContent='Saved. Everyone has it now.';
     toast('Published');
@@ -3154,20 +3158,38 @@ function adImport(){
   box.innerHTML='<h3>Bring in data.js from GitHub</h3>'+
     '<p class="lede">Loads the content file from the repo into the Desk, replacing what is here now. '+
     'Use it when the file has been prepared in GitHub, or to roll the site back to it. '+
-    'Nothing goes live until you press Save.</p>'+
+    'Nothing goes live until you press Save.<br><br>'+
+    '<strong>Tips people have submitted are kept.</strong> The file never overwrites them.</p>'+
     '<div class="row"><button class="b ghost" id="ghPull">Load data.js from GitHub</button>'+
     '<span class="note" id="ghMsg"></span></div>';
   $('ghPull').addEventListener('click',function(){
     if(S.dirty&&!confirm('You have unpublished changes in the Desk. Replace them with the file from GitHub?')) return;
     var b=$('ghPull'), m=$('ghMsg');
     b.disabled=true; b.textContent='Loading…'; m.textContent='';
+    /* get the live tips first, so what we keep is genuinely current */
+    pull(function(){ ghFetch(b,m); });
+  });
+}
+function ghFetch(b,m){
     fetch('https://raw.githubusercontent.com/'+REPO+'/main/data.js?t='+Date.now(),{cache:'no-store'})
       .then(function(r){ if(!r.ok) throw new Error('GitHub said '+r.status); return r.text(); })
       .then(function(txt){
         var keep=D.settings.apiUrl;
+        var liveTips=(D.tips||[]).slice();      /* what people have submitted */
         var obj=parseDataFile(txt);
         D=normalise(obj);
-        if(!D.settings.apiUrl) D.settings.apiUrl=keep;
+        /* the file carries content, not the connection — never let an old file
+           repoint the Desk at a different cloud than the one it is talking to */
+        if(keep) D.settings.apiUrl=keep;
+        /* the file is a content file, not a tipping record — live tips win,
+           and anyone only in the file is added rather than replacing them */
+        var merged=liveTips.slice();
+        (D.tips||[]).forEach(function(ft){
+          var has=merged.some(function(t){
+            return String(t.tipper||'').toLowerCase()===String(ft.tipper||'').toLowerCase(); });
+          if(!has) merged.push(ft);
+        });
+        D.tips=merged;
         b.disabled=false; b.textContent='Load data.js from GitHub';
         applySettings(); bootDesk(); mark('Loaded from GitHub · not saved yet');
         $('ghMsg').textContent='Loaded. Check it, then hit Save and go live.';
@@ -3178,7 +3200,6 @@ function adImport(){
         m.textContent='Could not load it: '+e.message;
         toast('Could not load data.js',true);
       });
-  });
 }
 
 /* ── tabs, gate, boot ── */
