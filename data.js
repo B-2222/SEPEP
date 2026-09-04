@@ -1,6 +1,10 @@
 /* SEPEP Gaelic content.
    Written by the media desk. To change anything, open the site,
-   click Desk in the sidebar, edit, then publish. */
+   click Desk in the sidebar, edit, then publish.
+
+   settings.version goes up by one every time this file is edited by
+   hand. The site compares it with the version held in the cloud and
+   shows whichever is newer, so the two can never fight. */
 
 const DATA = {
   "sections": [
@@ -766,6 +770,7 @@ const DATA = {
       "search": true,
       "themeSwap": true,
       "share": true
-    }
+    },
+    "version": 1
   }
 };

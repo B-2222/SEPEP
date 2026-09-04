@@ -1277,6 +1277,7 @@ function normalise(d){
     accent: s.accent || '#E0912A',
     theme:  s.theme  || 'auto',
     apiUrl: s.apiUrl || '',
+    version: num(s.version),      /* bumped whenever data.js is edited in the repo */
     features:{}
   };
   FEATURES.forEach(function(f){
@@ -1304,11 +1305,13 @@ function normalise(d){
 
 var seedMissing = (typeof DATA==='undefined' || !DATA || !DATA.teams);
 var seed = seedMissing ? {} : DATA;
-var D = normalise(clone(seed));
+var SEED = normalise(clone(seed));       /* what data.js in the repo says */
+var SEED_VER = num(SEED.settings.version);
+var D = clone(SEED);
 var F = function(k){ return !!D.settings.features[k]; };
 
 /* ─────────────── state ─────────────── */
-var S={ view:'home', fxFilter:'next', statSort:null, tipRound:null, apiPublished:false, dataRev:0, knownTippers:[],
+var S={ view:'home', fxFilter:'next', statSort:null, tipRound:null, apiPublished:false, dataRev:0, knownTippers:[], source:'file', cloudVer:0,
         myTips:{}, myName:'', cloud:'off', rev:0, dirty:false, deskOpen:false };
 try{ var mt=JSON.parse(localStorage.getItem(MYTIPS)||'{}');
      S.myName=mt.name||''; S.myTips=mt.picks||{}; }catch(e){}
@@ -1347,7 +1350,10 @@ function cacheSave(){
 function cacheLoad(){
   try{
     var c=JSON.parse(localStorage.getItem(CACHE)||'null');
-    if(c&&c.data&&c.data.teams&&c.data.teams.length){ S.rev=c.rev||0; return normalise(c.data); }
+    if(c&&c.data&&c.data.teams&&c.data.teams.length){
+      if(num((c.data.settings||{}).version)<SEED_VER) return null;   /* repo file is newer */
+      S.rev=c.rev||0; return normalise(c.data);
+    }
   }catch(e){}
   return null;
 }
@@ -1359,8 +1365,23 @@ function pull(after){
     else if(!res.data){ S.cloud='ok'; S.rev=res.rev||0; S.dataRev=res.dataRev||0; }
     else{
       var keepPass=D.settings.apiUrl;
-      D=normalise(res.data);
+      var cloudVer=num(((res.data.settings)||{}).version);
+
+      /* Two places hold content: data.js in the repo and the cloud. Whichever
+         has the higher version number wins outright, so the two can never be
+         half-merged into a mess. Tips are different — they only ever live in
+         the cloud, so they come across either way. */
+      if(SEED_VER>cloudVer){
+        var liveTips=res.data.tips||[];
+        D=normalise(clone(SEED));
+        D.tips=liveTips;
+        S.source='file';
+      } else {
+        D=normalise(res.data);
+        S.source='cloud';
+      }
       if(!D.settings.apiUrl) D.settings.apiUrl=keepPass;
+      S.cloudVer=cloudVer;
       S.rev=res.rev||0; S.dataRev=res.dataRev||0; S.cloud='ok';
       S.knownTippers=(D.tips||[]).map(function(t){ return String(t.tipper||''); });
       cacheSave(); applySettings();
@@ -3016,6 +3037,10 @@ function paintPublish(){
   } else if(api()){
     box.innerHTML='<h3><span class="dot '+(S.cloud==='ok'?'ok':S.cloud==='error'?'no':'wait')+'"></span>'+
       'Save to the cloud</h3>'+
+      (S.source==='file'
+        ? '<p class="lede" style="color:var(--accent)">The site is currently showing data.js from the '+
+          'repo, because it is newer than the cloud. Saving here puts the cloud back in charge with '+
+          'exactly what you see in the Desk right now.</p>' : '')+
       '<p class="lede">One button. Everyone sees it within a few seconds — no GitHub, no pasting.</p>'+
       '<div class="row"><button class="b" id="cloudSave">Save and go live</button>'+
       '<span class="note" id="cloudMsg"></span></div>';
@@ -3109,6 +3134,10 @@ function adCloud(){
        S.cloud==='error'?'Connected but not answering':'Checking…')+'</strong></div>'+
     '<div class="kv"><span>Saved into the site</span><strong>'+
       (!api()?'—':S.apiPublished?'Yes':'No — publish data.js once')+'</strong></div>'+
+    '<div class="kv"><span>Where the site is reading from</span><strong>'+
+      (!api()?'data.js in the repo'
+       :S.source==='file'?('data.js in the repo — it is newer (v'+SEED_VER+' vs v'+S.cloudVer+')')
+       :'the cloud')+'</strong></div>'+
     '<div class="kv"><span>Version on the cloud</span><strong>'+(S.rev||'—')+'</strong></div>'+
     '<div class="kv"><span>Public tipping</span><strong>'+
       (F('publicTips')?(api()?'On — tips save themselves':'On — copy and send only'):'Off')+'</strong></div>'+

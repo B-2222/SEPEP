@@ -22,6 +22,25 @@ takes over. That one is set at the top of `apps-script.gs`.
 Everything already added — reports, interviews, photos, quotes, rules, fixtures, squads —
 can be edited in place. You never have to delete something just to fix a typo.
 
+## Where the content comes from
+
+Two places can hold the content, and the site always shows whichever is newer,
+never a mix of the two:
+
+- **`data.js` in the repo** carries `settings.version`. It goes up by one every
+  time the file is edited by hand.
+- **The cloud** holds whatever the Desk last saved, stamped with the version it
+  came from.
+
+Higher version wins outright. So a results update committed to `data.js` goes
+live for everyone by itself, and the moment you save from the Desk the cloud is
+stamped with the same version and takes charge again.
+
+**Tips are the exception** — they only ever live in the cloud, and they come
+across whichever source is winning. Nothing in this can lose them.
+
+The Desk's Cloud tab always names the source the site is reading from.
+
 ## Publishing
 
 **Without the cloud:** the Desk gives you the new `data.js`, you paste it into GitHub and
