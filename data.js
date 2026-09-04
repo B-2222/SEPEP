@@ -312,9 +312,9 @@ const DATA = {
       "home": "T2",
       "away": "T1",
       "when": "",
-      "played": false,
-      "homeScore": "",
-      "awayScore": "",
+      "played": true,
+      "homeScore": 0,
+      "awayScore": 2,
       "date": ""
     },
     {
@@ -324,9 +324,9 @@ const DATA = {
       "home": "T3",
       "away": "T1",
       "when": "",
-      "played": false,
-      "homeScore": "",
-      "awayScore": "",
+      "played": true,
+      "homeScore": 6,
+      "awayScore": 2,
       "date": ""
     },
     {
@@ -470,6 +470,40 @@ const DATA = {
           "votes": 1
         }
       ]
+    },
+    {
+      "fixtureId": "g05",
+      "lines": [
+        {
+          "player": "Max Jenkinson",
+          "votes": 3
+        },
+        {
+          "player": "Charlie Newbold",
+          "votes": 2
+        },
+        {
+          "player": "Will Fox",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "fixtureId": "g06",
+      "lines": [
+        {
+          "player": "Jack Telfer",
+          "votes": 3
+        },
+        {
+          "player": "Will Liston",
+          "votes": 2
+        },
+        {
+          "player": "Max Jenkinson",
+          "votes": 1
+        }
+      ]
     }
   ],
   "potr": [],
@@ -607,6 +641,43 @@ const DATA = {
             "Goals": 0,
             "Overs": 0,
             "Saves": 1
+          }
+        }
+      ]
+    },
+    {
+      "fixtureId": "g06",
+      "lines": [
+        {
+          "player": "Will Liston",
+          "values": {
+            "Goals": 4,
+            "Overs": 0,
+            "Saves": 0
+          }
+        },
+        {
+          "player": "Jack Telfer",
+          "values": {
+            "Goals": 2,
+            "Overs": 0,
+            "Saves": 0
+          }
+        },
+        {
+          "player": "Aleksa",
+          "values": {
+            "Goals": 1,
+            "Overs": 0,
+            "Saves": 0
+          }
+        },
+        {
+          "player": "Max Jenkinson",
+          "values": {
+            "Goals": 1,
+            "Overs": 0,
+            "Saves": 0
           }
         }
       ]
