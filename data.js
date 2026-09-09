@@ -340,9 +340,9 @@ const DATA = {
       "home": "T2",
       "away": "T3",
       "when": "",
-      "played": false,
-      "homeScore": "",
-      "awayScore": "",
+      "played": true,
+      "homeScore": 6,
+      "awayScore": 9,
       "date": ""
     },
     {
@@ -352,9 +352,9 @@ const DATA = {
       "home": "T2",
       "away": "T1",
       "when": "",
-      "played": false,
-      "homeScore": "",
-      "awayScore": "",
+      "played": true,
+      "homeScore": 4,
+      "awayScore": 0,
       "date": ""
     },
     {
@@ -505,6 +505,23 @@ const DATA = {
         },
         {
           "player": "Max Jenkinson",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "fixtureId": "g07",
+      "lines": [
+        {
+          "player": "Will Liston",
+          "votes": 3
+        },
+        {
+          "player": "Cooper",
+          "votes": 2
+        },
+        {
+          "player": "Charlie Newbold",
           "votes": 1
         }
       ]
@@ -685,6 +702,56 @@ const DATA = {
           }
         }
       ]
+    },
+    {
+      "fixtureId": "g07",
+      "lines": [
+        {
+          "player": "Will Liston",
+          "values": {
+            "Goals": 6,
+            "Overs": 0,
+            "Saves": 0
+          }
+        },
+        {
+          "player": "Cooper",
+          "values": {
+            "Goals": 3,
+            "Overs": 0,
+            "Saves": 0
+          }
+        },
+        {
+          "player": "Charlie Newbold",
+          "values": {
+            "Goals": 3,
+            "Overs": 0,
+            "Saves": 0
+          }
+        },
+        {
+          "player": "Will Fox",
+          "values": {
+            "Goals": 0,
+            "Overs": 0,
+            "Saves": 1
+          }
+        }
+      ]
+    },
+    {
+      "fixtureId": "g08",
+      "lines": [
+        {
+          "player": "Cooper",
+          "values": {
+            "Goals": 4,
+            "Overs": 0,
+            "Saves": 0
+          }
+        }
+      ]
     }
   ],
   "tips": [
@@ -771,6 +838,6 @@ const DATA = {
       "themeSwap": true,
       "share": true
     },
-    "version": 1
+    "version": 2
   }
 };
